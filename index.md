@@ -711,14 +711,12 @@ Random Forest R2 (0.453) is slightly worse than LinearRegression (0.454). Howeve
 
 ## Fairness Analysis
 
-
 |county   |counts     |
 |:--------|----------:|
 |Honolulu    |327941|
 |Maui         |76186|
 |Hawaii       |67813|
 |Kauai        |26504|
-Name: count, dtype: int64
 
 It's evident that Honolulu County has the most restaurants. Originally, I planed to do fairness analysis on Honolulu and non-Honolulu restaurants.
 
