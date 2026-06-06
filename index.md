@@ -494,17 +494,7 @@ Now that I have reflected, here is the correct conclusion.
 > With a p-value of 0, we reject the null hypothesis. The missingness in `price` does depend on `is_restaurant`, and, more generally, its `category`. 
 
 
-[insert plotly plot here]
-The distribution of column 
-Y
- when column 
-X
- is missing and the distribution of column 
-Y
- when column 
-X
- is not missing, as was done in Lecture 8.
-• The empirical distribution of the test statistic used in one of your permutation tests, along with the observed statistic.
+<iframe src="assets/category-price_missingness.html" width="800" height="600" frameborder="0"></iframe>
 
 ## Hypothesis Testing
 I originally created the `is_coastal` feature because I thought that a business' proximity to the outer corners of the island would have some relation to its average rating. I made a data visualization to compare differences in average rating from coastal to inland businesses, and saw... no relationship. However. I did not spend an excessive amount of time creating a feature to *not* use it, so we're going to run a hypothesis test using the `is_coastal` column knowing full well we will probably fail to reject the null hypothesis. Onwards, for science.
@@ -606,7 +596,7 @@ It turned out that `price` was encoded as a mixture of USD ($) and Korean Won (�
 |$$      |289861|
 |$       |156888|
 |$$$      |25955|
-|$$$$     |10310|
+|\'$$$$'     |10310|
 |₩₩        |5345|
 |₩₩₩₩      |4859|
 |₩         |3798|
@@ -638,7 +628,7 @@ These were the only missing values afterwards. This missingness is Missing by De
 
 **Features**
 |Features                    | Type |
-|:---------------------------|:-----|
+|:---------------------------|-----:|
 | price                      |ordinal|
 | pics                       |nominal|
 | sentiment                  |ordinal|
@@ -656,7 +646,7 @@ This is score awful! I think this first trial was bad because I didn't aggregate
 
 **Features**
 |Features                    | Type |
-|:---------------------------|:-----|
+|:---------------------------|-----:|
 | price                      |ordinal|
 | **NEW: pics_prop**                       |nominal|
 | **NEW: sentiment_mean**                  |ordinal|
@@ -665,7 +655,9 @@ This is score awful! I think this first trial was bad because I didn't aggregate
 | num_of_reviews             |quantitative|
 
 `pics_prop` created a more informative variable by turning the original data type (a numpy array of hypterlinks to images) to a 0-1 encoding.  
+
 `sentiment_mean` averages the sentiment of all reviews per restaurant into a single value.  
+
 `review_length_mean` averages the length of all reviews per restaurant into a single value.
 
 These changes to my features were made with the intention of making the data more informative and easier for the model to parse.
@@ -716,7 +708,7 @@ Random Forest R2 (0.453) is slightly worse than LinearRegression (0.454). Howeve
 
 ## Fairness Analysis
 
-|county|counts|
+|county   |counts     |
 |:--------|----------:|
 |Honolulu    |327941|
 |Maui         |76186|
