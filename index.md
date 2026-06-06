@@ -1,3 +1,11 @@
+--
+layout: default
+title: Hawaii Google Maps Restaurant Rating Analysis
+--
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
 # Hawaii Google Maps Restaurant Rating Analysis
 
 ## Introduction
@@ -6,7 +14,7 @@ I am working on the `Hawaii Google Maps Reviews` dataset from Jiacheng Li, Jingb
 
 This project uses two datasets -- the `meta` dataset, which provides business metadata, and `reviews` dataset, which collates an extensive list of guest reviews.
 
-In this project, I will be developing several new features to use in a Linear Regression and Random Forest model. Below is a list of all features in the three datasets I will be working on.
+In this project, I will be developing several new features to use in a Linear Regression and Random Forest model. The bolded columns are features that I added to the existing dataset.
 
 #### `meta`, 21,507 rows
 
@@ -27,13 +35,13 @@ In this project, I will be developing several new features to use in a Linear Re
 | state | the current status of the business (e.g., permanently closed) |
 | relative_results | relative businesses recommended by Google |
 | url | URL of the business |
-| zipcode | zipcode of the business |
-| county | county of the business (Hawaii) |
-| center_lat | geographic center of the county (latitude) |
-| center_long | geographic center of the county (longitude) |
-| center_distance | distance of business from geographic center |
-| coastal_threshold | threshold for farthest 30% of businesses from geographic center |
-| is_coastal | coastal or inland status |
+| **NEW: zipcode** | zipcode of the business |
+| **NEW: county** | county of the business (Hawaii) |
+| **NEW: center_lat** | geographic center of the county (latitude) |
+| **NEW: center_long** | geographic center of the county (longitude) |
+| **NEW: center_distance** | distance of business from geographic center |
+| **NEW: coastal_threshold** | threshold for farthest 30% of businesses from geographic center |
+| **NEW: is_coastal** | coastal or inland status |
 
 #### `review`, 1,504,347 rows
 
@@ -47,9 +55,9 @@ In this project, I will be developing several new features to use in a Linear Re
 | pics | pictures of the review |
 | resp | business response to the review including unix time and text of the response |
 | gmap_id | ID of the business |
-| review_length | character length of review |
-| sentiment | positive-negative sentiment score. -1 to 1. |
-| sentiment_labeled | positive-negative sentiment score. binned |
+| **NEW: review_length** | character length of review |
+| **NEW: sentiment** | positive-negative sentiment score. -1 to 1. |
+| **NEW: sentiment_labeled** | positive-negative sentiment score. binned |
 
 #### `restaurants`, 567,012 rows
 
@@ -70,13 +78,13 @@ In this project, I will be developing several new features to use in a Linear Re
 | state | the current status of the business (e.g., permanently closed) |
 | relative_results | relative businesses recommended by Google |
 | url | URL of the business |
-| zipcode | zipcode of the business |
-| county | county of the business (Hawaii) |
-| center_lat | geographic center of the county (latitude) |
-| center_long | geographic center of the county (longitude) |
-| center_distance | distance of business from geographic center |
-| coastal_threshold | threshold for farthest 30% of businesses from geographic center |
-| is_coastal | coastal or inland status |
+| **zipcode** | zipcode of the business |
+| **county** | county of the business (Hawaii) |
+| **center_lat** | geographic center of the county (latitude) |
+| **center_long** | geographic center of the county (longitude) |
+| **center_distance** | distance of business from geographic center |
+| **coastal_threshold** | threshold for farthest 30% of businesses from geographic center |
+| **is_coastal** | coastal or inland status |
 | user_id | ID of the reviewer |
 | name_y | name of the reviewer |
 | time | time of the review (unix time) |
@@ -84,9 +92,9 @@ In this project, I will be developing several new features to use in a Linear Re
 | text | text of the review |
 | pics | pictures of the review. **EDITED: 1 if photos included, 0 if not** |
 | resp | business response to the review including unix time and text of the response |
-| review_length | character length of review |
-| sentiment | positive-negative sentiment score. -1 to 1. |
-| sentiment_labeled | positive-negative sentiment score. binned |
+| **review_length** | character length of review |
+| **sentiment** | positive-negative sentiment score. -1 to 1. |
+| **sentiment_labeled** | positive-negative sentiment score. binned |
 | **NEW: zipcode_restaurant_density** | count of all restaurants in zipcode |
 | **NEW: sentiment_mean** | average sentiment score per business |
 | **NEW: review_length_mean** | average review character length per business |
@@ -100,7 +108,7 @@ In this project, I will be developing several new features to use in a Linear Re
 ✅ County column  
 ✅ Center Distance column  
 ✅ Coastal vs. Inland column  
-✅ Restaurant density/competition column
+⚠️ Restaurant density/competition column
 
 ### Zipcode Column
 To create our `county` column, we first needed to create a `zipcode` column. I created a `get_zipcode` function that extracted the zipcode of each business. I applied this function to `meta['address']` to create the new column. 
@@ -257,15 +265,15 @@ I'll use the haversine formula with atan2 for more stability, as that's what Sta
 
 The Haversine distance $d$ between two points is given by:
 
-\begin{equation}
+$$
 d = 2R \cdot \operatorname{arctan2}\left(\sqrt{a}, \sqrt{1-a}\right)
-\end{equation}
+$$
 
 where the intermediate value $a$ is:
 
-\begin{equation}
+$$
 a = \sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1) \cos(\phi_2) \sin^2\left(\frac{\Delta\lambda}{2}\right)
-\end{equation}
+$$
 
 **Variable Explanations**  
 $d$: The distance between the two points along the sphere's surface.  
@@ -279,14 +287,12 @@ $\operatorname{atan2}(y, x)$: The two-argument arctangent function, which comput
 
 I first created a `haversine_distance` function, which calculated the haversine distance given two latitude and longitude points. Then, I calculated `center_distance`, or a business' distance from its county's geographic center. When I first ran this, I got the following maximum values:
 
-```
 |county |
 |:------|
 |Hawaii|       184.590626|
 |Honolulu |   1506.077762|
 |Kauai     |   113.637627|
 |Maui      |   105.639856|
-```
 
 If I wasn't mistaken, my original distances were larger than the state of Hawaii, much less the county. The NaN values for center_lat and center_long line up with not having `county` values, so missingness of the latitude longitude data is not the problem.
 ```python
