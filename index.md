@@ -420,7 +420,7 @@ This is a subset of the `meta` dataframe. From here on out, we will refer to thi
 | 191348 | Starbucks      | Starbucks, 91-1105 Keaunui Dr #500, Ewa Beach, HI 96706    | Seattle-based coffeehouse chain known for its signature roasts, light bites and WiFi availability. |                                                                                           |    nan      | nan                 |
 | 486453 | Duke's Waikiki | Duke's Waikiki, 2335 Kalakaua Ave #116, Honolulu, HI 96815 | Popular option known for its beachfront location, surf 'n' turf, tiki vibe & umbrella drinks.      | Good food. Great staff. Stunning view!                                                    |      0.8718 | very positive       |
 
-<iframe src="kristelaavendano/hawaii-google-maps-reviews/assets/num-businesses-county.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="/kristelaavendano/hawaii-google-maps-reviews/assets/num-businesses-county.html" width="800" height="600" frameborder="0"></iframe>
 ###
 
 ## Assessment of Missingness
