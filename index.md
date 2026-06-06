@@ -6,9 +6,9 @@ I am working on the `Hawaii Google Maps Reviews` dataset from Jiacheng Li, Jingb
 
 This project uses two datasets -- the `meta` dataset, which provides business metadata, and `reviews` dataset, which collates an extensive list of guest reviews.
 
-In this project, I will be developing the following features. Below is a list of all features in three datasets.
+In this project, I will be developing several new features to use in a Linear Regression and Random Forest model. Below is a list of all features in the three datasets I will be working on.
 
-#### `meta`
+#### `meta`, 21,507 rows
 
 | Column Name | Description |
 |:------------|:------------|
@@ -35,7 +35,7 @@ In this project, I will be developing the following features. Below is a list of
 | coastal_threshold | threshold for farthest 30% of businesses from geographic center |
 | is_coastal | coastal or inland status |
 
-#### `review`
+#### `review`, 1,504,347 rows
 
 | Column Name | Description |
 |:------------|:------------|
@@ -51,7 +51,7 @@ In this project, I will be developing the following features. Below is a list of
 | sentiment | positive-negative sentiment score. -1 to 1. |
 | sentiment_labeled | positive-negative sentiment score. binned |
 
-#### `restaurants`
+#### `restaurants`, 567,012 rows
 
 | Column Name | Description |
 |:------------|:------------|
@@ -91,6 +91,7 @@ In this project, I will be developing the following features. Below is a list of
 | **NEW: sentiment_mean** | average sentiment score per business |
 | **NEW: review_length_mean** | average review character length per business |
 | **NEW: pics_prop** | proportion of reviews with pictures per business |
+
 
 
 ## Data Cleaning and EDA
