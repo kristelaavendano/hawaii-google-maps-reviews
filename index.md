@@ -108,6 +108,14 @@ To create our `county` column, we first needed to create a `zipcode` column. I c
 ### County Column
 Then, I created a custom dictionary that mapped all zipcodes in Hawaii to their corresponding counties. This was a manualy process, and initially, when I compared the number of missing `county` values to `zipcode` values, I got this tuple: `(835, 417)`.
 
+If the missingness values of `county` were dependent on `zipcode`, the values in the tuple should be equal to each other. A closer look into the corresponding addresses of missing `county` values revealed an array of zipcodes I overlooked in the creation of my dictionary.
+
+> array(['96857', None, '96733', '96848', '96796', '96726', '96795',
+       '96853', '96860', '96127', '96745', '96123', '96751', '96863',
+       '96861', '96718', '96830', '96767', '96858', '96867', '96824',
+       '96859'], dtype=object)
+
+I updated the dictionary with the list of zipcodes. Interestingly, the zipcodes 96127 and 96123 are both located in Lassen County, California. I pulled up the specific address and business to see what was going on.
 
 **`reviews` Dataset**  
 ✅ Review length column  
