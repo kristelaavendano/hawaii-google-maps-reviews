@@ -149,8 +149,88 @@ Business Name: Gas Lanes
 Business Address: Gas Lanes, Building 3071, 3rd St, MCBH, HI 96867
 ```
 
-This address, called `Gas Lanes` and referred to as `Marine Mart` is located on Marine Corps Base, HI. While the zipcode itself does not seem to exist, the address is correct through search verification. I have a feeling that this zipcode scenario has something to do with the fact that this gas station/convenience store is only open to MCBH access only. We'll impute NaN values for this business' `county` and `zipcode` values to omit this from analysis.
+This address, called `Gas Lanes` and referred to as `Marine Mart` is located on Marine Corps Base, HI. While the zipcode itself does not seem to exist, the address is correct through search verification. I have a feeling that this zipcode scenario has something to do with the fact that this gas station/convenience store is only open to MCBH access only. I imputed NaN values for this business' `county` and `zipcode` values to omit this from analysis.
 
+With my dictionary now updated, I checked my missingness distribution again.
+
+```python
+print("County distribution:")
+print(meta['county'].value_counts())
+print(f"\nMissing: {meta['county'].isna().sum()}")
+```
+```
+County distribution:
+county
+Honolulu    11944
+Hawaii       3793
+Maui         3680
+Kauai        1672
+Name: count, dtype: int64
+
+Missing: 418
+```
+Those fixes reduced the number of our `county` missing values from **835** to **418**. Note that our number of missing zipcodes went up from 417 to 418 because of our changes to Gas Mart.
+
+```python
+(meta[meta['county'].isna()].shape[0], meta[meta['zipcode'].isna()].shape[0])
+```
+```
+(418, 418)
+```
+
+I then moved on to the discrepancy between missing `address` and `zipcode` values.
+
+```python
+(meta[meta['address'].isna()].shape[0], meta[meta['zipcode'].isna()].shape[0])
+```
+```
+(318, 418)
+```
+
+We can assume that 318/418 of the missing zipcodes is due to missing zipcodes in the address. Let's try to figure out what's up with the last 100 missing zipcode values.
+
+```python
+missing_zipcodes = meta[meta['county'].isna()]['zipcode'].unique()
+### UNCOMMENT ONLY TO CREATE DF IF YOU HAVEN'T DONE SO ALREADY
+# meta[meta['zipcode'].isna()][['name', 'address', 'category']].to_csv('missing_zipcodes.txt', index = False)
+
+missing_zipcodes_df = pd.read_csv('missing_zipcodes.txt')
+missing_zipcodes_df['address'].unique().shape[0]
+```
+```
+99
+```
+
+The shape of 99 seems to match up almost exactly with our 100 missing zipcode values.
+
+```python
+meta[meta['zipcode'].isna()]['address'].unique()[:10]
+```
+```
+array([None, 'Black Pot Beach, Hanalei, HI',
+       'Mauna Kea Observatory, Island of, HI', 'Kahului Bay, Hawaii',
+       'Old Mānā Plantation Camp, Hawaii', 'Kawākiu Nui, Hawaii',
+       'Kuia Stream, Hawaii', 'Kawainui Stream, Hawaii',
+       'Kaho‘olawe, Hawaii', 'Lōʻihi Seamount'], dtype=object)
+```
+```python
+missing_zipcode_categories = meta[meta['zipcode'].isna()]['address']
+
+mzc_samples = np.random.choice(missing_zipcode_categories, size = 10, replace = False)
+mzc_samples
+```
+```
+array([None, None, 'Midway Island, United States Minor Outlying Islands',
+       None, None, None, None, None, None, 'Lahaina Roads'], dtype=object)
+```
+
+The total number of our remaining missing zipcodes is either because there is  
+* NO provided address
+* NO provided zipcode in the address.
+
+For our analysis, we'll skip all rows with no zipcode/county.
+
+### Coastal vs. Inland Column
 
 **`reviews` Dataset**  
 ✅ Review length column  
