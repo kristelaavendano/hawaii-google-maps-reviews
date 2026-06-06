@@ -14,7 +14,7 @@ MathJax = {
 
 I am working on the `Hawaii Google Maps Reviews` dataset from Jiacheng Li, Jingbo Shang, and Julian McAuley. My project is centered around extracting insight from business metadata and guest reviews to estimate the average star review of a restaurant.
 
-This project uses two datasets -- the `meta` dataset, which provides business metadata, and `reviews` dataset, which collates an extensive list of guest reviews.
+This project uses three datasets -- the `meta` dataset, which provides business metadata, the `reviews` dataset, which collates an extensive list of guest reviews, and `restaurants`, a subset of the merged `meta` and `reviews` dataframes.
 
 In this project, I will be developing several new features to use in a Linear Regression and Random Forest model. The bolded columns are features that I added to the existing dataset.
 
