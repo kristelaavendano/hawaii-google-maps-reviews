@@ -8,12 +8,21 @@ This project uses two datasets -- the `meta` dataset, which provides business me
 
 In this project, I will be developing the following features. Below is a list of all features in three datasets.
 
-
-
 #### `meta`
-| Column Name | Description |
-|:-------------|:-------------|
-|name         |name of the business
+| 
+Column Name 
+| 
+Description 
+|
+|
+:-------------
+|
+:-------------
+|
+|
+name         
+|
+name of the business
 |address      |	address of the business
 |gmap_id      |ID of the business
 |description  |description of the business
