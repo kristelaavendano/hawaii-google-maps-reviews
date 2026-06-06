@@ -543,41 +543,42 @@ I am using R2 to evaluate my model as I am not using a classifier, so metrics li
 Here is a list of all of the columns in our `restaurants` dataframe.
 
 #### `restaurants`
+
 | Column Name | Description |
-|:-------------|:-------------|
-|name_x         |name of the business
-|address      |	address of the business
-|gmap_id      |ID of the business
-|description  |description of the business
-|latitude     |latitude of the business
-|longitude    |longitude of the business
-|category     |category of the business
-|avg_rating   |average rating of the business
-|num_of_reviews|number of reviews
-|price         |price of the business
-|hours         |open hours
-|MISC          |MISC information
-|state          |the current status of the business (e.g., permanently closed)
-|relative_results|	relative businesses recommended by Google
-|url             |URL of the business
-|zipcode         |zipcode of the business
-|county          |county of the business (Hawaii)
-|center_lat      |geographic center of the county (latitude)
-|center_long     |geographic center of the county (longitude)
-|center_distance |distance of business from geographic center
-|coastal_threshold|threshold for farthest 30% of businesses from geographic center
-|is_coastal       |coastal or inland status
-|user_id|	ID of the reviewer
-|name_y|	name of the reviewer
-|time|	time of the review (unix time)
-|rating|	rating of the business
-|text|	text of the review
-|pics|	pictures of the review. **EDITED: 1 if photos included, 0 if not**
-|resp|	business response to the review including unix time and text of the response
-|review_length|character length of review
-|sentiment|positive-negative sentiment score. -1 to 1.
-|sentiment_labeled|positive-negative sentiment score. binned
-|**NEW: zipcode_restaurant_density**|count of all restaurants in zipcode.
+|:-------------|-------------:|
+|name_x         |name of the business|
+|address      |	address of the business|
+|gmap_id      |ID of the business|
+|description  |description of the business|
+|latitude     |latitude of the business|
+|longitude    |longitude of the business|
+|category     |category of the business|
+|avg_rating   |average rating of the business|
+|num_of_reviews|number of reviews|
+|price         |price of the business|
+|hours         |open hours|
+|MISC          |MISC information|
+|state          |the current status of the business (e.g., permanently closed)|
+|relative_results|	relative businesses recommended by Google|
+|url             |URL of the business|
+|zipcode         |zipcode of the business|
+|county          |county of the business (Hawaii)|
+|center_lat      |geographic center of the county (latitude)|
+|center_long     |geographic center of the county (longitude)|
+|center_distance |distance of business from geographic center|
+|coastal_threshold|threshold for farthest 30% of businesses from geographic center|
+|is_coastal       |coastal or inland status|
+|user_id|	ID of the reviewer|
+|name_y|	name of the reviewer|
+|time|	time of the review (unix time)|
+|rating|	rating of the business|
+|text|	text of the review|
+|pics|	pictures of the review. **EDITED: 1 if photos included, 0 if not**|
+|resp|	business response to the review including unix time and text of the response|
+|review_length|character length of review|
+|sentiment|positive-negative sentiment score. -1 to 1.|
+|sentiment_labeled|positive-negative sentiment score. binned|
+|**NEW: zipcode_restaurant_density**|count of all restaurants in zipcode.|
 
 For my baseline model, I used the following features:
 * price
@@ -590,7 +591,7 @@ For my baseline model, I used the following features:
 When double checking the type of the features, I noticed that `price` was an object type.
 
 |                            | 0       |
-|:---------------------------|:--------|
+|:---------------------------|--------:|
 | price                      | object |
 | pics                       | int64   |
 | sentiment                  | float64 |
@@ -601,7 +602,7 @@ When double checking the type of the features, I noticed that `price` was an obj
 It turned out that `price` was encoded as a mixture of USD ($) and Korean Won (₩). 
 
 |price| |
-|:-----|:----|
+|:-----|----:|
 |$$      |289861|
 |$       |156888|
 |$$$      |25955|
