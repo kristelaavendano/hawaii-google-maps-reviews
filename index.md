@@ -326,7 +326,6 @@ Google search shows that the geographic boundaries of Hawaii are
 
 The outliers in our dataset have impossible latitude/longitude values. I got rid of all rows with invalid latitude and longitude values and ran it again.
 
-```
 | | county | latitude | longitude | center_lat | center_long | center_distance |
 |:--|:--------|:---------|:----------|:-----------|:------------|:----------------|
 | 9766 | Hawaii | 21.393852 | -157.742967 | 19.692992 | -155.542907 | 184.590626 |
@@ -334,7 +333,6 @@ The outliers in our dataset have impossible latitude/longitude values. I got rid
 | 15448 | Honolulu | 19.758484 | -155.455961 | 21.351255 | -157.895734 | 192.422146 |
 | 15780 | Honolulu | 19.644531 | -155.993291 | 21.351255 | -157.895734 | 170.490843 |
 | 18630 | Maui | 21.321267 | -158.068642 | 20.852130 | -156.509107 | 105.639856 |
-```
 
 > We did it, Joe!  
 > -VP Kamala Harris
@@ -344,6 +342,7 @@ The outliers in our dataset have impossible latitude/longitude values. I got rid
 ```python
 # Check the distribution
 print(meta['is_coastal'].value_counts())
+```
 
 | is_coastal | count |
 |:-----------|------:|
