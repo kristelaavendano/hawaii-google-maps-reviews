@@ -509,15 +509,15 @@ X
 ## Hypothesis Testing
 I originally created the `is_coastal` feature because I thought that a business' proximity to the outer corners of the island would have some relation to its average rating. I made a data visualization to compare differences in average rating from coastal to inland businesses, and saw... no relationship. However. I did not spend an excessive amount of time creating a feature to *not* use it, so we're going to run a hypothesis test using the `is_coastal` column knowing full well we will probably fail to reject the null hypothesis. Onwards, for science.
 
+> 🙋‍♀️ Do businesses located near the coast receive higher average ratings than businesses located inland?
+
+We'll run a permutation test to see if there's a meaningful difference between ratings for coastal and inland restaurants, specifically in Honolulu County. 
+
 **Null Hypothesis** - Honolulu County businesses located near the coast receive similar average ratings to businesses located inland.
 
 **Alternative Hypothesis** - Honolulu County businesses located near the coast receive higher average ratings than businesses located inland.
 
 **Test Statistic** - Difference in means
-
-> 🙋‍♀️ Do businesses located near the coast receive higher average ratings than businesses located inland?
-
-We'll run a permutation test to see if there's a meaningful difference between ratings for coastal and inland restaurants, specifically in Honolulu County. 
 
 **Significance Level** - α = 0.05
 
@@ -529,6 +529,17 @@ With a p-value less than 0.05, we reject the null hypothesis. However, with our 
 
 
 ## Framing a Prediction Problem
+If someone told me four years ago that I would be predicting things, I would have accused you of witchcraft and sorcery. Now I can do witchcraft and sorcery.
+
+Today, I will be predicting `avg_rating`, or the average star-rating of a business. I'm training my models on the a modified `restaurants` dataframe, so it's more realistic to say that I will be predicting `avg_rating` for restaurants, specifically.
+
+This is a __regression problem__.
+
+I'm choosing to predict `avg_rating` because 
+
+Clearly state your prediction problem and type (classification or regression). If you are building a classifier, make sure to state whether you are performing binary classification or multiclass classification. Report the response variable (i.e. the variable you are predicting) and why you chose it, the metric you are using to evaluate your model and why you chose it over other suitable metrics (e.g. accuracy vs. F1-score).
+
+Note: Make sure to justify what information you would know at the “time of prediction” and to only train your model using those features. For instance, if we wanted to predict your final exam grade, we couldn’t use your Final Project grade, because the project is only due after the final exam! Feel free to ask questions if you’re not sure.
 
 ## Baseline Model
 
