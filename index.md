@@ -493,8 +493,9 @@ Now that I have reflected, here is the correct conclusion.
 
 > With a p-value of 0, we reject the null hypothesis. The missingness in `price` does depend on `is_restaurant`, and, more generally, its `category`. 
 
-
 <iframe src="assets/category-price-missingness.html" width="800" height="600" frameborder="0"></iframe>
+
+This visualization shows the difference between the two categories, of course, "Other" dominates since restaurants take up a small percentage of all businesses in Hawaii, but it reflects a meaningful difference in missingness.
 
 ## Hypothesis Testing
 I originally created the `is_coastal` feature because I thought that a business' proximity to the outer corners of the island would have some relation to its average rating. I made a data visualization to compare differences in average rating from coastal to inland businesses, and saw... no relationship. However. I did not spend an excessive amount of time creating a feature to *not* use it, so we're going to run a hypothesis test using the `is_coastal` column knowing full well we will probably fail to reject the null hypothesis. Onwards, for science.
@@ -580,7 +581,7 @@ For my baseline model, I used the following features:
 
 When double checking the type of the features, I noticed that `price` was an object type.
 
-|                            | 0       |
+|Features                    | Missing Values |
 |:---------------------------|--------:|
 | price                      | object |
 | pics                       | int64   |
@@ -596,7 +597,7 @@ It turned out that `price` was encoded as a mixture of USD ($) and Korean Won (�
 |$$      |289861|
 |$       |156888|
 |$$$      |25955|
-|\'$$$$'     |10310|
+|\$\$\$\$     |10310|
 |₩₩        |5345|
 |₩₩₩₩      |4859|
 |₩         |3798|
@@ -612,7 +613,7 @@ Since both the $ and the ₩ are on a 1-4 scale, I normalized this feature and e
 
 I dropped the rows in `restaurants` where `price` was null and saved it to a new dataframe called `restaurants_dropped`. 
 
-|                            |   0 |
+| Features                   |   Missing Values |
 |:---------------------------|----:|
 | price                      |   0 |
 | pics                       |   0 |
