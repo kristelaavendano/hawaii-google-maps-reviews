@@ -412,13 +412,16 @@ Here's another sample of some reviews accompanied by their sentiment score.
 |  106319 |                                                                                                 |    nan      |
 
 **`restaurants` DataFrame**
-This is a subset of the `meta` dataframe. From here on out, we will refer to this dataset for most of our research questions, as I wanted to focus on restaurants. Here is a sample of the `restaurants` dataframe, which has 
+This is a subset of the `meta` dataframe. From here on out, we will refer to this dataset for most of our research questions, as I wanted to focus on restaurants. Here is a sample of the `restaurants` dataframe, which has all columns from the `meta` and `review` dataframes.
 
 |        | name_x         | address                                                    | description                                                                                        | text                                                                                      |   sentiment | sentiment_labeled   |
 |-------:|:---------------|:-----------------------------------------------------------|:---------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------|------------:|:--------------------|
 | 538808 | Dunkin'        | Dunkin', 3270 Ualena St, Honolulu, HI 96819                | Long-running chain serving signature donuts, breakfast sandwiches & a variety of coffee drinks.    | They have  great variety of different donuts I love the glazed ones there very delicious! |      0.9272 | very positive       |
 | 191348 | Starbucks      | Starbucks, 91-1105 Keaunui Dr #500, Ewa Beach, HI 96706    | Seattle-based coffeehouse chain known for its signature roasts, light bites and WiFi availability. |                                                                                           |    nan      | nan                 |
 | 486453 | Duke's Waikiki | Duke's Waikiki, 2335 Kalakaua Ave #116, Honolulu, HI 96815 | Popular option known for its beachfront location, surf 'n' turf, tiki vibe & umbrella drinks.      | Good food. Great staff. Stunning view!                                                    |      0.8718 | very positive       |
+
+<iframe src="num-businesses-county.html" width="800" height="600" frameborder="0"></iframe>
+###
 
 ## Assessment of Missingness
 
