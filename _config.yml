@@ -2,6 +2,6 @@ remote_theme: pages-themes/minimal@v0.2.0
 title: Hawaii Google Maps Restaurant Rating Analysis
 markdown: kramdown
 kramdown:
-  smart_quotes: false
+  smart_quotes: ["apos", "apos", "quot", "quot"]
 plugins:
 - jekyll-remote-theme # add this line to the plugins list if you already have one
