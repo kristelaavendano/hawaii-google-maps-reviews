@@ -90,7 +90,6 @@ In this project, I will be developing the following features. Below is a list of
 |**NEW: review_length_mean**|average review character length per business
 |**NEW: pics_prop***|proportion of reviews with pictures per business
 
-#### `restaurants`
 
 ## Data Cleaning and EDA
 **`meta` Dataset**  
@@ -99,6 +98,9 @@ In this project, I will be developing the following features. Below is a list of
 ✅ Center Distance column  
 ✅ Coastal vs. Inland column  
 ✅ Restaurant density/competition column
+
+To create our `county` column, we first needed to create a `zipcode` column. We would then 
+
 
 **`reviews` Dataset**  
 ✅ Review length column  
