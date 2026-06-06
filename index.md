@@ -95,6 +95,16 @@ In this project, I will be developing the following features. Below is a list of
 #### `restaurants`
 
 ## Data Cleaning and EDA
+**`meta` Dataset**  
+✅ Zipcode column  
+✅ County column  
+✅ Center Distance column  
+✅ Coastal vs. Inland column  
+✅ Restaurant density/competition column
+
+**`reviews` Dataset**  
+✅ Review length column  
+✅ Sentiment column
 
 ## Assessment of Missingness
 
