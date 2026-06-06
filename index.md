@@ -535,14 +535,155 @@ Today, I will be predicting `avg_rating`, or the average star-rating of a busine
 
 This is a __regression problem__.
 
-I'm choosing to predict `avg_rating` because 
+I'm choosing to predict `avg_rating` because I'm interested in seeing what features are the most predictive of average rating. 
 
-Clearly state your prediction problem and type (classification or regression). If you are building a classifier, make sure to state whether you are performing binary classification or multiclass classification. Report the response variable (i.e. the variable you are predicting) and why you chose it, the metric you are using to evaluate your model and why you chose it over other suitable metrics (e.g. accuracy vs. F1-score).
+I am using R2 to evaluate my model as I am not using a classifier, so metrics like accuracy, precision, and recall don't really apply. It is a measurement of how much variance is explained by the model, and is the output when .score is called.
 
-Note: Make sure to justify what information you would know at the “time of prediction” and to only train your model using those features. For instance, if we wanted to predict your final exam grade, we couldn’t use your Final Project grade, because the project is only due after the final exam! Feel free to ask questions if you’re not sure.
+### Summary
+Here is a list of all of the columns in our `restaurants` dataframe.
+
+#### `restaurants`
+| Column Name | Description |
+|:-------------|:-------------|
+|name_x         |name of the business
+|address      |	address of the business
+|gmap_id      |ID of the business
+|description  |description of the business
+|latitude     |latitude of the business
+|longitude    |longitude of the business
+|category     |category of the business
+|avg_rating   |average rating of the business
+|num_of_reviews|number of reviews
+|price         |price of the business
+|hours         |open hours
+|MISC          |MISC information
+|state          |the current status of the business (e.g., permanently closed)
+|relative_results|	relative businesses recommended by Google
+|url             |URL of the business
+|zipcode         |zipcode of the business
+|county          |county of the business (Hawaii)
+|center_lat      |geographic center of the county (latitude)
+|center_long     |geographic center of the county (longitude)
+|center_distance |distance of business from geographic center
+|coastal_threshold|threshold for farthest 30% of businesses from geographic center
+|is_coastal       |coastal or inland status
+|user_id|	ID of the reviewer
+|name_y|	name of the reviewer
+|time|	time of the review (unix time)
+|rating|	rating of the business
+|text|	text of the review
+|pics|	pictures of the review. **EDITED: 1 if photos included, 0 if not**
+|resp|	business response to the review including unix time and text of the response
+|review_length|character length of review
+|sentiment|positive-negative sentiment score. -1 to 1.
+|sentiment_labeled|positive-negative sentiment score. binned
+|**NEW: zipcode_restaurant_density**|count of all restaurants in zipcode.
+
+For my baseline model, I used the following features:
+* price
+* pics (changed to be a binary variable)
+* sentiment
+* review_length
+* zipcode_restaurant_density
+* num_of_reviews
+
+When double checking the type of the features, I noticed that `price` was an object type.
+
+|                            | 0       |
+|:---------------------------|:--------|
+| price                      | object |
+| pics                       | int64   |
+| sentiment                  | float64 |
+| review_length              | float64 |
+| zipcode_restaurant_density | float64 |
+| num_of_reviews             | int64   |
+
+It turned out that `price` was encoded as a mixture of USD ($) and Korean Won (₩). 
+
+|price| |
+|:-----|:----|
+|$$      |289861|
+|$       |156888|
+|$$$      |25955|
+|$$$$     |10310|
+|₩₩        |5345|
+|₩₩₩₩      |4859|
+|₩         |3798|
+|₩₩₩       |1428|
+
+Since both the $ and the ₩ are on a 1-4 scale, I normalized this feature and encode these as numbers.
+
+|        | name_x                         |   price |
+|-------:|:-------------------------------|--------:|
+| 441296 | Haleiwa Joe's                  |       2 |
+| 430670 | Dukes Lane Market & Eatery     |       2 |
+| 133500 | Blane's Drive Inn - Industrial |       1 |
+
+I dropped the rows in `restaurants` where `price` was null and saved it to a new dataframe called `restaurants_dropped`. 
+
+|                            |   0 |
+|:---------------------------|----:|
+| price                      |   0 |
+| pics                       |   0 |
+| sentiment                  |   202052 |
+| review_length              |   202052 |
+| zipcode_restaurant_density |   0 |
+| num_of_reviews             |   0 |
+
+These were the only missing values afterwards. This missingness is Missing by Design. It's probably referring to the people who left a star rating, but not a written rating. I imputed these values with 0 for both columns.
 
 ## Baseline Model
+**Model Type:** Linear Regression
+
+**Features**
+|Features                    | Type |
+|:---------------------------|:-----|
+| price                      |ordinal|
+| pics                       |nominal|
+| sentiment                  |ordinal|
+| review_length              |quantitative |
+| zipcode_restaurant_density |quantitative|
+| num_of_reviews             |quantitative|
+
+**Model R2 Score**: 0.1420777294912413
+
+This is score awful! I think this first trial was bad because I didn't aggregate review-level information to business-level information.
+
 
 ## Final Model
+**Model 1 Type:** Linear Regression
+
+**Features**
+|Features                    | Type |
+|:---------------------------|:-----|
+| price                      |ordinal|
+| **NEW: pics_prop**                       |nominal|
+| **NEW: sentiment_mean**                  |ordinal|
+| **NEW: review_length_mean**              |quantitative |
+| zipcode_restaurant_density |quantitative|
+| num_of_reviews             |quantitative|
+
+**Model 1 R2 Score:** 0.4541950075348419
+
+**Model 2 Type:** Random Forest
+
+**Features**
+The same
+
+**Hyperparameters**
+
+
+**Model 2 R2 Score:**
+
+State the features you added and why they are good for the data and prediction task. Note that you can’t simply state “these features improved my accuracy”, since you’d need to choose these features and fit a model before noticing that – instead, talk about why you believe these features improved your model’s performance from the perspective of the data generating process.
+
+Describe the modeling algorithm you chose, the hyperparameters that ended up performing the best, and the method you used to select hyperparameters and your overall model. Describe how your Final Model’s performance is an improvement over your Baseline Model’s performance.
+
+Optional: Include a visualization that describes your model’s performance, e.g. a confusion matrix, if applicable.
 
 ## Fairness Analysis
+Clearly state your choice of Group X and Group Y, your evaluation metric, your null and alternative hypotheses, your choice of test statistic and significance level, the resulting 
+p
+-value, and your conclusion.
+
+Optional: Embed a visualization related to your permutation test in your website.
