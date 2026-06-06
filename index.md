@@ -640,7 +640,7 @@ These were the only missing values afterwards. This missingness is Missing by De
 
 **Model R2 Score**: 0.1420777294912413
 
-This is score awful! I think this first trial was bad because I didn't aggregate review-level information to business-level information.
+This score is awful! I think this first trial was bad because I didn't aggregate review-level information to business-level information.
 
 
 ## Final Model
@@ -701,7 +701,7 @@ param_grid = {
 **Hyperparameters**
 I used GridSearchCV to iteratively find the best combination of hyperparameters.
 
->max_depth = 20
+>max_depth = 20  
 >n_estimators = 100
 
 **Model 2 R2 Score:** 0.4532637913987857
@@ -710,6 +710,7 @@ Random Forest R2 (0.453) is slightly worse than LinearRegression (0.454). Howeve
 
 
 ## Fairness Analysis
+
 
 |county   |counts     |
 |:--------|----------:|
