@@ -423,7 +423,17 @@ This is a subset of the `meta` dataframe. From here on out, we will refer to thi
 ## Want Some Visuals?! 😎🏖️🐳🏄‍♀️
 ### Univariate Data Visualizations
 <iframe src="assets/num-businesses-county.html" width="800" height="600" frameborder="0"></iframe>
+This bar chart shows the total number of businesses in each Hawaiian county. Here, we can see that Honolulu County trumps everyone else by a significant amount. I wonder why? 🤔💭
+
 <iframe src="assets/distance-county.html" width="800" height="600" frameborder="0"></iframe>
+This visualization represents the distances of all businesses in Kauai County from the calculated geographic center, which is the average of all latitude and longitude values. We can see that most businesses have fairly similar distances to the geographic center, indicating that most businesses are clustered together around the center.
+
+### Bivariate Data Visualizations
+<iframe src="assets/num-reviews-rating.html" width="800" height="600" frameborder="0"></iframe>
+This scatterplot shows the relationship between the number of reviews a business has and their average rating. We can see a slight relationship between the number of ratings a business receives and their average rating. The confounding variable is likely general popularity.
+
+<iframe src="assets/sentiment-rating.html" width="800" height="600" frameborder="0"></iframe>
+This series of boxplots shows the interquartile spread in average ratings separated by sentiment label (how positive or negative the review was). We can see that more positive ratings have tighter IQRs compared to more negative ratings.
 
 ###
 
