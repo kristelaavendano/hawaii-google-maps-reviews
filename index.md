@@ -494,7 +494,7 @@ Now that I have reflected, here is the correct conclusion.
 > With a p-value of 0, we reject the null hypothesis. The missingness in `price` does depend on `is_restaurant`, and, more generally, its `category`. 
 
 
-<iframe src="assets/category-price_missingness.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/category-price-missingness.html" width="800" height="600" frameborder="0"></iframe>
 
 ## Hypothesis Testing
 I originally created the `is_coastal` feature because I thought that a business' proximity to the outer corners of the island would have some relation to its average rating. I made a data visualization to compare differences in average rating from coastal to inland businesses, and saw... no relationship. However. I did not spend an excessive amount of time creating a feature to *not* use it, so we're going to run a hypothesis test using the `is_coastal` column knowing full well we will probably fail to reject the null hypothesis. Onwards, for science.
@@ -627,8 +627,9 @@ These were the only missing values afterwards. This missingness is Missing by De
 **Model Type:** Linear Regression
 
 **Features**
+
 |Features                    | Type |
-|:---------------------------|-----:|
+|:---------------------------|:-----|
 | price                      |ordinal|
 | pics                       |nominal|
 | sentiment                  |ordinal|
@@ -645,8 +646,9 @@ This is score awful! I think this first trial was bad because I didn't aggregate
 **Model 1 Type:** Linear Regression
 
 **Features**
+
 |Features                    | Type |
-|:---------------------------|-----:|
+|:---------------------------|:-----|
 | price                      |ordinal|
 | **NEW: pics_prop**                       |nominal|
 | **NEW: sentiment_mean**                  |ordinal|
