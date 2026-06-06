@@ -102,7 +102,11 @@ In this project, I will be developing several new features to use in a Linear Re
 ✅ Coastal vs. Inland column  
 ✅ Restaurant density/competition column
 
-To create our `county` column, we first needed to create a `zipcode` column. We would then 
+### Zipcode Column
+To create our `county` column, we first needed to create a `zipcode` column. I created a `get_zipcode` function that extracted the zipcode of each business. I applied this function to `meta['address']` to create the new column. 
+
+### County Column
+Then, I created a custom dictionary that mapped all zipcodes in Hawaii to their corresponding counties. This was a manualy process, and initially, when I compared the number of missing `county` values to `zipcode` values, I got this tuple: `(835, 417)`.
 
 
 **`reviews` Dataset**  
