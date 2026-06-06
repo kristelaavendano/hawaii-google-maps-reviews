@@ -263,7 +263,7 @@ I then mapped the dictionaries to two new columns, `center_lat` and `center_long
 
 Next, I faced the task of actually calculating distances. Since the Earth is mostly spherical and not flat, typical Euclidean distance calculations can't be used. Instead, I had to use the Haversine formula for calculating great-circle distances. Though I wish I could say I was a flat earth believer in order to use Euclidean distances instead, alas, I must face reality.
 
-I'll use the haversine formula with atan2 for more stability, as that's what Stackoverflow recommends. I used the integrated AI in the Brave web browser to format the Haversine formula in LaTeX for pasting in markdown.
+I'll use the haversine formula with atan2 for more stability, as that's what Stackoverflow recommends.
 
 The Haversine distance $d$ between two points is given by:
 
@@ -336,7 +336,7 @@ The outliers in our dataset have impossible latitude/longitude values. I got rid
 | 18630 | Maui | 21.321267 | -158.068642 | 20.852130 | -156.509107 | 105.639856 |
 ```
 
-> We did it, Joe!
+> We did it, Joe!  
 > -VP Kamala Harris
 
 `center_distance` columns acquired. Finally, I could combine everything into the `is_coastal` column.
@@ -344,14 +344,14 @@ The outliers in our dataset have impossible latitude/longitude values. I got rid
 ```python
 # Check the distribution
 print(meta['is_coastal'].value_counts())
-```
+
 | is_coastal | count |
 |:-----------|------:|
 | False | 14890 |
 | True | 6244 |
-```
+
 Just checking by county.
-```
+
 | county | is_coastal | count |
 |:-------|:-----------|------:|
 | Hawaii | False | 2655 |
@@ -362,11 +362,52 @@ Just checking by county.
 | Kauai | True | 419 |
 | Maui | False | 2576 |
 | Maui | True | 1104 |
-```
+
+### Restaurant Density Column
+The `meta` dataset includes all businesses, not just restaurants. I'm going to approximate restaurant density by doing a simple count of how many restaurants are in each county, but I'll create this column once I subset meta to a smaller `restaurants` dataframe. So, keep this column in mind!
+
+I ended the `meta` data cleaning section by replacing all None values with `np.nan`.
 
 **`reviews` Dataset**  
 ✅ Review length column  
 ✅ Sentiment column
+
+### Review Length Column
+This was fairly simple. I took the length of the total review.
+
+'|        | text                                                                                                                                  |   review_length |\n|-------:|:--------------------------------------------------------------------------------------------------------------------------------------|----------------:|\n| 721472 |                                                                                                                                       |             nan |\n| 220427 | Very very expensive for fast food restaurant                                                                                          |              44 |\n| 969030 | Free coffee samples, great walking, been drinking coffee from this location all year.  Spent $240 on coffee for our fiends back home. |             133 |'
+
+|         | text                                                                               |   review_length |
+|--------:|:-----------------------------------------------------------------------------------|----------------:|
+|  898479 | The service and food was good                                                      |              29 |
+| 1458303 | The actual Memorial is closed due to ramp repairs. Not sure when it will be fixed. |              82 |
+|  251276 | Its Jersey Mike's. You're a fool if you dont like the subs here.                   |              64 |
+
+### Sentiment Column
+In a previous class, when we conducted sentiment analysis on a corpus, we did everything in R with a package. I assumed that there would also be a Python library out there that could calculate sentiment very simply, rather than me using a rudimentary custom words dictionary.
+
+I chose to use VADER and its SentimentIntensityAnalyzer from the mltk module. VADER scores sentiment on a scale of -1 to 1 (focus on the 'compound' key in the score dictionary the polarity_scores method generates).
+
+Here's a sample review I extracted.
+
+```
+'Last night the lobster bisque soup was too thin, too little.\nDictionary says bisque should be creamy, rich, and flavorful.\nAnd the prime rib was too fat untrimmed, bloody Rare instead of "medium-rare".\n\nNext night the Onion Soup was B+ good and the 4 half inch thin lamb chops,cooked medium, were Delicious!\nGood chocolate cake, but could use ice cream, a bit dry.\nDeuce table tipsy and it spilled my beer oops. Good Service from Taylor!'
+```
+
+This was the output.
+```
+{'neg': 0.024, 'neu': 0.82, 'pos': 0.157, 'compound': 0.876}
+```
+
+I was surprised by this score, and it revealed some limitations with VADER. This is a mixed review, clearly, but it's scored quite positively in the compound value at 0.876. I think it weighed words like "Delicious", "good", "good", "good service" more compared to "too thin", "too little", "too fat", etc. But this is one instance, I think it should generalize ok.
+
+Here's another sample of our values.
+
+|         | text                                                                                            |   sentiment |
+|--------:|:------------------------------------------------------------------------------------------------|------------:|
+| 1393541 | It's a beautiful place, it's in Hawaii and the view is beautiful, and the water is so beautiful |      0.9136 |
+|  347974 | Was okay                                                                                        |      0.2263 |
+|  106319 |                                                                                                 |    nan      |
 
 ## Assessment of Missingness
 
