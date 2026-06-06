@@ -307,7 +307,7 @@ print(meta['center_long'].isna().sum())
 ```
 
 I took a look at the rows with the aforementioned maximum values.
-```
+
 | | county | latitude | longitude | center_lat | center_long | center_distance |
 |:--|:--------|:---------|:----------|:-----------|:------------|:----------------|
 | 9766 | Hawaii | 21.393852 | -157.742967 | 19.692992 | -155.542907 | 184.590626 |
@@ -315,14 +315,14 @@ I took a look at the rows with the aforementioned maximum values.
 | 12399 | Honolulu | 28.289839 | -177.372887 | 21.351255 | -157.895734 | 1310.107968 |
 | 15413 | Kauai | 21.456171 | -157.768809 | 22.026183 | -159.429620 | 113.637627 |
 | 15448 | Honolulu | 19.758484 | -155.455961 | 21.351255 | -157.895734 | 192.422146 |
-```
+
 
 Google search shows that the geographic boundaries of Hawaii are
 
-**min_latitude:** 18.910361
-**max_latitude:** 28.402123
-**min_longitude:** -178.334698
-**max_longitude:** -154.806773
+**min_latitude:** 18.910361  
+**max_latitude:** 28.402123  
+**min_longitude:** -178.334698  
+**max_longitude:** -154.806773  
 
 The outliers in our dataset have impossible latitude/longitude values. I got rid of all rows with invalid latitude and longitude values and ran it again.
 
@@ -374,7 +374,9 @@ I ended the `meta` data cleaning section by replacing all None values with `np.n
 ### Review Length Column
 This was fairly simple. I took the length of the total review.
 
-'|        | text                                                                                                                                  |   review_length |\n|-------:|:--------------------------------------------------------------------------------------------------------------------------------------|----------------:|\n| 721472 |                                                                                                                                       |             nan |\n| 220427 | Very very expensive for fast food restaurant                                                                                          |              44 |\n| 969030 | Free coffee samples, great walking, been drinking coffee from this location all year.  Spent $240 on coffee for our fiends back home. |             133 |'
+|        | text                                                                                |   review_length |
+|-------:|:--------------------------------------------------------------------------------------------------------------------------------------|----------------:|
+| 220427 | Very very expensive for fast food restaurant                                                                                          |              44 |\n| 969030 | Free coffee samples, great walking, been drinking coffee from this location all year.  Spent $240 on coffee for our fiends back home. |             133 |'
 
 |         | text                                                                               |   review_length |
 |--------:|:-----------------------------------------------------------------------------------|----------------:|
