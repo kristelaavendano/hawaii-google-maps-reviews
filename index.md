@@ -448,7 +448,7 @@ Here's a pivot table I made. It's pretty interesting. The overall relationship I
 | Maui     |         4.18889 |             4.21439 |   4.25355 |             4.3338  |         4.40879 |
 
 ## Assessment of Missingness
-You may have seen earlier that we inadverdently had an assessment of missingness when creating the county column. Unfortunately, I'm not allowed to repeat examples of missingness, so let's take a look at a different instance of missingness in my datasets.
+You may have seen earlier that we inadverdently had an assessment of missingness when creating the `county` column. Unfortunately, I'm not allowed to repeat examples of missingness, so let's take a look at a different instance of missingness in my datasets.
 
 We had some missing prices earlier in our dataset. I have a suspicion that the missingness of prices is dependent on category (so, *Missing At Random*) instead of *Not Missing at Random*.
 
@@ -474,16 +474,59 @@ These are the top categories of businesses where `price` WAS missing.
 
 I also took a high level look, and saw that businesses were `price` was missing were a lot of national parks and beaches. So, these are my hypotheses:
 
-**Null:** The distribution of `category` is the same whether `price` is missing or not.
+**Null:** The distribution of `category` is the same whether `price` is missing or not.  
 **Alternative:** The distribution of `category` differs when `price` is missing vs present.
 
 > 📝 For the TAs grading my website, yes, I realize I wrote `address` instead of `price` in my hypotheses in the Jupyter Notebook file submission. I also used `fair_permute_diffs` and `n_permutations` instead of `missing_permute_diffs` and `missingness_n_permute`. This is because I am stupid.
 
 Because `category` is a categorical variable, we will use Total Variation Distance (TVD). There are a lot of different categories, so I'll simplify it by comparing on `Is Restaurant` or not.
 
-When I calculated the observed TVD, I got **0.04320464177865135**. Now, 
+When I calculated the observed TVD, I got **0.04320464177865135**. Now, when I ran my permutation test, I got a p-value of 0.
+
+The first time around, with my incorrect code, I concluded that
+
+> With a p_val of 0.15, we fail to reject the null hypothesis. The missingness in price does not depend on is_restaurant, a simplification of category. There is no significance evidence that price missingness depends on category.
+
+This is incorrect though. And now I see that I wrote "significance evidence" instead of "significant evidence". I will take a moment to reflect on my errors. Can I use the excuse that I've been horribly sick, and that damaged my neurons? 🤒😵
+
+Now that I have reflected, here is the correct conclusion.
+
+> With a p-value of 0, we reject the null hypothesis. The missingness in `price` does depend on `is_restaurant`, and, more generally, its `category`. 
+
+
+[insert plotly plot here]
+The distribution of column 
+Y
+ when column 
+X
+ is missing and the distribution of column 
+Y
+ when column 
+X
+ is not missing, as was done in Lecture 8.
+• The empirical distribution of the test statistic used in one of your permutation tests, along with the observed statistic.
 
 ## Hypothesis Testing
+I originally created the `is_coastal` feature because I thought that a business' proximity to the outer corners of the island would have some relation to its average rating. I made a data visualization to compare differences in average rating from coastal to inland businesses, and saw... no relationship. However. I did not spend an excessive amount of time creating a feature to *not* use it, so we're going to run a hypothesis test using the `is_coastal` column knowing full well we will probably fail to reject the null hypothesis. Onwards, for science.
+
+**Null Hypothesis** - Honolulu County businesses located near the coast receive similar average ratings to businesses located inland.
+
+**Alternative Hypothesis** - Honolulu County businesses located near the coast receive higher average ratings than businesses located inland.
+
+**Test Statistic** - Difference in means
+
+> 🙋‍♀️ Do businesses located near the coast receive higher average ratings than businesses located inland?
+
+We'll run a permutation test to see if there's a meaningful difference between ratings for coastal and inland restaurants, specifically in Honolulu County. 
+
+**Significance Level** - α = 0.05
+
+**Observed Difference** - 0.006871577227930636
+
+**P-Value** - 0.0
+
+With a p-value less than 0.05, we reject the null hypothesis. However, with our observed difference of 0.0069 being just a little bit over the max value of our permute_diffs, our finding holds minimal practical significance, as the actual difference is so minute.
+
 
 ## Framing a Prediction Problem
 
