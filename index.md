@@ -376,7 +376,8 @@ This was fairly simple. I took the length of the total review.
 
 |        | text                                                                                |   review_length |
 |-------:|:--------------------------------------------------------------------------------------------------------------------------------------|----------------:|
-| 220427 | Very very expensive for fast food restaurant                                                                                          |              44 |\n| 969030 | Free coffee samples, great walking, been drinking coffee from this location all year.  Spent $240 on coffee for our fiends back home. |             133 |'
+| 220427 | Very very expensive for fast food restaurant                                                                                          |              44 |
+| 969030 | Free coffee samples, great walking, been drinking coffee from this location all year.  Spent $240 on coffee for our fiends back home. |             133 |
 
 |         | text                                                                               |   review_length |
 |--------:|:-----------------------------------------------------------------------------------|----------------:|
@@ -402,13 +403,22 @@ This was the output.
 
 I was surprised by this score, and it revealed some limitations with VADER. This is a mixed review, clearly, but it's scored quite positively in the compound value at 0.876. I think it weighed words like "Delicious", "good", "good", "good service" more compared to "too thin", "too little", "too fat", etc. But this is one instance, I think it should generalize ok.
 
-Here's another sample of our values.
+Here's another sample of some reviews accompanied by their sentiment score.
 
 |         | text                                                                                            |   sentiment |
 |--------:|:------------------------------------------------------------------------------------------------|------------:|
 | 1393541 | It's a beautiful place, it's in Hawaii and the view is beautiful, and the water is so beautiful |      0.9136 |
 |  347974 | Was okay                                                                                        |      0.2263 |
 |  106319 |                                                                                                 |    nan      |
+
+**`restaurants` DataFrame**
+This is a subset of the `meta` dataframe. From here on out, we will refer to this dataset for most of our research questions, as I wanted to focus on restaurants. Here is a sample of the `restaurants` dataframe, which has 
+
+|        | name_x         | address                                                    | description                                                                                        | text                                                                                      |   sentiment | sentiment_labeled   |
+|-------:|:---------------|:-----------------------------------------------------------|:---------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------|------------:|:--------------------|
+| 538808 | Dunkin'        | Dunkin', 3270 Ualena St, Honolulu, HI 96819                | Long-running chain serving signature donuts, breakfast sandwiches & a variety of coffee drinks.    | They have  great variety of different donuts I love the glazed ones there very delicious! |      0.9272 | very positive       |
+| 191348 | Starbucks      | Starbucks, 91-1105 Keaunui Dr #500, Ewa Beach, HI 96706    | Seattle-based coffeehouse chain known for its signature roasts, light bites and WiFi availability. |                                                                                           |    nan      | nan                 |
+| 486453 | Duke's Waikiki | Duke's Waikiki, 2335 Kalakaua Ave #116, Honolulu, HI 96815 | Popular option known for its beachfront location, surf 'n' turf, tiki vibe & umbrella drinks.      | Good food. Great staff. Stunning view!                                                    |      0.8718 | very positive       |
 
 ## Assessment of Missingness
 
