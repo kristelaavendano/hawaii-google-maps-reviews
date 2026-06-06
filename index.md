@@ -12,6 +12,8 @@ MathJax = {
 
 ## Introduction
 
+Hercules once sang, "I can go the distance" in the 1997 animated film of the same namesake. Have you ever thought about whether you could go the distance? I have not, but I am using the quote as an opener for a project that calculates haversine distances, so you should laugh right now. As I prepare to visit Hawaii for the first time ever (exciting!), I thought it would be fun to see what businesses I should pay a visit to. But there are so many businesses! How can I possibly decide? That's where this monster of a dataset comes in. 😊
+
 I am working on the `Hawaii Google Maps Reviews` dataset from Jiacheng Li, Jingbo Shang, and Julian McAuley. My project is centered around extracting insight from business metadata and guest reviews to estimate the average star review of a restaurant.
 
 This project uses three datasets -- the `meta` dataset, which provides business metadata, the `reviews` dataset, which collates an extensive list of guest reviews, and `restaurants`, a subset of the merged `meta` and `reviews` dataframes.
@@ -426,7 +428,7 @@ This is a subset of the `meta` dataframe. From here on out, we will refer to thi
 This bar chart shows the total number of businesses in each Hawaiian county. Here, we can see that Honolulu County trumps everyone else by a significant amount. I wonder why? 🤔💭
 
 <iframe src="assets/distance-county.html" width="800" height="600" frameborder="0"></iframe>
-This visualization represents the distances of all businesses in Kauai County from the calculated geographic center, which is the average of all latitude and longitude values. We can see that most businesses have fairly similar distances to the geographic center, indicating that most businesses are clustered together around the center.
+This visualization represents the distances of all businesses in Kauai County from the calculated geographic center, which is the average of all latitude and longitude values by county. We can see that most businesses have fairly similar distances to the geographic center, indicating that most businesses are clustered together around the center.
 
 ### Bivariate Data Visualizations
 <iframe src="assets/num-reviews-rating.html" width="800" height="600" frameborder="0"></iframe>
@@ -435,9 +437,51 @@ This scatterplot shows the relationship between the number of reviews a business
 <iframe src="assets/sentiment-rating.html" width="800" height="600" frameborder="0"></iframe>
 This series of boxplots shows the interquartile spread in average ratings separated by sentiment label (how positive or negative the review was). We can see that more positive ratings have tighter IQRs compared to more negative ratings.
 
-###
+### Pivot Table
+Here's a pivot table I made. It's pretty interesting. The overall relationship I was expecting (very negative to very positive) is consistent across all counties, especially if you look from left to right row-wise. However, the variance in mean rating values differ by county.
+
+| county   |   very negative |   slightly negative |   neutral |   slightly positive |   very positive |
+|:---------|----------------:|--------------------:|----------:|--------------------:|----------------:|
+| Hawaii   |         4.12839 |             4.16517 |   4.18229 |             4.27158 |         4.36039 |
+| Honolulu |         4.06364 |             4.10899 |   4.15815 |             4.21512 |         4.29224 |
+| Kauai    |         4.18328 |             4.23554 |   4.24102 |             4.30525 |         4.39069 |
+| Maui     |         4.18889 |             4.21439 |   4.25355 |             4.3338  |         4.40879 |
 
 ## Assessment of Missingness
+You may have seen earlier that we inadverdently had an assessment of missingness when creating the county column. Unfortunately, I'm not allowed to repeat examples of missingness, so let's take a look at a different instance of missingness in my datasets.
+
+We had some missing prices earlier in our dataset. I have a suspicion that the missingness of prices is dependent on category (so, *Missing At Random*) instead of *Not Missing at Random*.
+
+These are the top categories of businesses where `price` was NOT missing.
+
+| category             |   count |
+|:---------------------|--------:|
+| Restaurant           |    1243 |
+| Fast food restaurant |     413 |
+| Coffee shop          |     331 |
+| Breakfast restaurant |     312 |
+| Takeout Restaurant   |     288 |
+
+These are the top categories of businesses where `price` WAS missing.
+
+| category           |   count |
+|:-------------------|--------:|
+| Tourist attraction |    1190 |
+| Restaurant         |     834 |
+| Park               |     586 |
+| Clothing store     |     347 |
+| Auto repair shop   |     337 |
+
+I also took a high level look, and saw that businesses were `price` was missing were a lot of national parks and beaches. So, these are my hypotheses:
+
+**Null:** The distribution of `category` is the same whether `price` is missing or not.
+**Alternative:** The distribution of `category` differs when `price` is missing vs present.
+
+> 📝 For the TAs grading my website, yes, I realize I wrote `address` instead of `price` in my hypotheses in the Jupyter Notebook file submission. I also used `fair_permute_diffs` and `n_permutations` instead of `missing_permute_diffs` and `missingness_n_permute`. This is because I am stupid.
+
+Because `category` is a categorical variable, we will use Total Variation Distance (TVD). There are a lot of different categories, so I'll simplify it by comparing on `Is Restaurant` or not.
+
+When I calculated the observed TVD, I got **0.04320464177865135**. Now, 
 
 ## Hypothesis Testing
 
