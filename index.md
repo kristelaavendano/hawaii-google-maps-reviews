@@ -664,27 +664,89 @@ This is score awful! I think this first trial was bad because I didn't aggregate
 | zipcode_restaurant_density |quantitative|
 | num_of_reviews             |quantitative|
 
+`pics_prop` created a more informative variable by turning the original data type (a numpy array of hypterlinks to images) to a 0-1 encoding.  
+`sentiment_mean` averages the sentiment of all reviews per restaurant into a single value.  
+`review_length_mean` averages the length of all reviews per restaurant into a single value.
+
+These changes to my features were made with the intention of making the data more informative and easier for the model to parse.
+
+
 **Model 1 R2 Score:** 0.4541950075348419
 
 **Model 2 Type:** Random Forest
 
 **Features**
-The same
+The same, mostly.
+
+I plotted the distributions of my two quantitative variables.
+
+<iframe src="assets/num-review-hist.html" width="800" height="600" frameborder="0"></iframe>
+
+<iframe src="assets/zipcode-density-hist.html" width="800" height="600" frameborder="0"></iframe>
+
+We can see a right and left skew in the data. According to the Internet, it says that for right-skewed data, the most effective transformations are log transformation including log1p and square root transformation, and for left-skew using power transformations with high exponent values. Further questioning reveals that Quantile Transformers are good for handing both right-skewed and left-skewed data. In my ColumnTransformer, I applied a quantile transformer to both quantitative columns.
+
+```python
+preprocessor = ColumnTransformer([
+    ('num_reviews', QuantileTransformer(), ['num_of_reviews']),
+    ('restaurant_density', QuantileTransformer(), ['zipcode_restaurant_density']),
+], remainder='passthrough')
+
+pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('model', RandomForestRegressor())
+])
+
+param_grid = {
+    'model__n_estimators': [10, 50, 100],
+    'model__max_depth': [5, 10, 20]
+}
+```
 
 **Hyperparameters**
+I used GridSearchCV to iteratively find the best combination of hyperparameters.
 
+>max_depth = 20
+>n_estimators = 100
 
-**Model 2 R2 Score:**
+**Model 2 R2 Score:** 0.4532637913987857
 
-State the features you added and why they are good for the data and prediction task. Note that you can’t simply state “these features improved my accuracy”, since you’d need to choose these features and fit a model before noticing that – instead, talk about why you believe these features improved your model’s performance from the perspective of the data generating process.
+Random Forest R2 (0.453) is slightly worse than LinearRegression (0.454). However, this is an approximately 219.72% increase in R2, meaning that the changes made to the features must have been good for increasing model performance.
 
-Describe the modeling algorithm you chose, the hyperparameters that ended up performing the best, and the method you used to select hyperparameters and your overall model. Describe how your Final Model’s performance is an improvement over your Baseline Model’s performance.
-
-Optional: Include a visualization that describes your model’s performance, e.g. a confusion matrix, if applicable.
 
 ## Fairness Analysis
-Clearly state your choice of Group X and Group Y, your evaluation metric, your null and alternative hypotheses, your choice of test statistic and significance level, the resulting 
-p
--value, and your conclusion.
 
-Optional: Embed a visualization related to your permutation test in your website.
+|county|counts|
+|:--------|----------:|
+|Honolulu    |327941|
+|Maui         |76186|
+|Hawaii       |67813|
+|Kauai        |26504|
+Name: count, dtype: int64
+
+It's evident that Honolulu County has the most restaurants. Originally, I planed to do fairness analysis on Honolulu and non-Honolulu restaurants.
+
+**Null:** Any difference in R2 between Honolulu and non-Honolulu restaurants is due to random chance.  
+**Alt:** The model performs differently for Honolulu restaurants than non-Honolulu restaurants.
+
+However, since `county` was not in my original set of features, I switched to `price`. 
+
+|No. of Expensive Restaurants: 45|
+|No. of Cheap Restaurants: 584|
+
+**Null:** Any difference in R2 between expensive (3-4) and cheap (1-2) restaurants is due to random chance.  
+**Alt:** The model performs differently for expensive (3-4) than cheap (1-2) restaurants.
+
+> 📝 For TAs grading my website, I realize that my alternative hypothesis of "performs differently" means that I should have used the absolute difference in means, not just difference in means. So, I revised my hypothesis to be more accurate to what I was actually measuring.
+
+**Null:** Any difference in R2 between expensive (3-4) and cheap (1-2) restaurants is due to random chance.  
+**Alt:** The model performs worse for expensive (3-4) than cheap (1-2) restaurants.
+
+**Test Statistic:** Absolute difference in means
+
+**Observed Difference:** 0.8035565479678938
+This was my original R2 score. 
+
+**P value:** np.float64(0.0)
+
+Our p-value of 0.0 means that none of the 150 permutations run produced a difference as extreme as -0.8, signaling a statistically significant difference in performance between expensive and cheaper restaurants. We reject the null hypothesis.
