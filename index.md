@@ -231,6 +231,130 @@ The total number of our remaining missing zipcodes is either because there is
 For our analysis, we'll skip all rows with no zipcode/county.
 
 ### Coastal vs. Inland Column
+I define "coastal" as top 30% of businesses furthest from center of a county. We'll approximate center of a county by taking the average latitude and longitude values for each county. I saved these into dictionaries with corresponding counties as the keys.
+
+I then mapped the dictionaries to two new columns, `center_lat` and `center_long`.
+
+|    | county   |   center_lat |
+|---:|:---------|-------------:|
+|  0 | Honolulu |      21.3513 |
+|  1 | Honolulu |      21.3513 |
+|  2 | Maui     |      20.8521 |
+|  3 | Maui     |      20.8521 |
+|  4 | Honolulu |      21.3513 |
+
+|    | county   |   center_long |
+|---:|:---------|--------------:|
+|  0 | Honolulu |      -157.896 |
+|  1 | Honolulu |      -157.896 |
+|  2 | Maui     |      -156.509 |
+|  3 | Maui     |      -156.509 |
+|  4 | Honolulu |      -157.896 |
+
+Next, I faced the task of actually calculating distances. Since the Earth is mostly spherical and not flat, typical Euclidean distance calculations can't be used. Instead, I had to use the Haversine formula for calculating great-circle distances. Though I wish I could say I was a flat earth believer in order to use Euclidean distances instead, alas, I must face reality.
+
+I'll use the haversine formula with atan2 for more stability, as that's what Stackoverflow recommends. I used the integrated AI in the Brave web browser to format the Haversine formula in LaTeX for pasting in markdown.
+
+The Haversine distance $d$ between two points is given by:
+
+\begin{equation}
+d = 2R \cdot \operatorname{arctan2}\left(\sqrt{a}, \sqrt{1-a}\right)
+\end{equation}
+
+where the intermediate value $a$ is:
+
+\begin{equation}
+a = \sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1) \cos(\phi_2) \sin^2\left(\frac{\Delta\lambda}{2}\right)
+\end{equation}
+
+**Variable Explanations**  
+$d$: The distance between the two points along the sphere's surface.  
+$R$: The radius of the Earth (mean radius $\approx$ 6,371 km or 3,959 mi).  
+$\phi_1, \phi_2$: The latitude of point 1 and point 2, expressed in radians.  
+$\lambda_1, \lambda_2$: The longitude of point 1 and point 2, expressed in radians.  
+$\Delta\phi$: The difference in latitude ($\phi_2 - \phi_1$).  
+$\Delta\lambda$: The difference in longitude ($\lambda_2 - \lambda_1$).  
+$a$: The square of half the chord length between the points (a dimensionless value between 0 and 1).  
+$\operatorname{atan2}(y, x)$: The two-argument arctangent function, which computes the angle whose tangent is $y/x$, using the signs of both arguments to determine the correct quadrant. Here, it effectively calculates the central angle $c = 2 \times \operatorname{atan2}(\sqrt{a}, \sqrt{1-a})$.
+
+I first created a `haversine_distance` function, which calculated the haversine distance given two latitude and longitude points. Then, I calculated `center_distance`, or a business' distance from its county's geographic center. When I first ran this, I got the following maximum values:
+
+```
+|county |
+|:------|
+|Hawaii|       184.590626|
+|Honolulu |   1506.077762|
+|Kauai     |   113.637627|
+|Maui      |   105.639856|
+```
+
+If I wasn't mistaken, my original distances were larger than the state of Hawaii, much less the county. The NaN values for center_lat and center_long line up with not having `county` values, so missingness of the latitude longitude data is not the problem.
+```python
+print(meta['center_lat'].isna().sum())
+print(meta['center_long'].isna().sum())
+```
+```
+418
+418
+```
+
+I took a look at the rows with the aforementioned maximum values.
+```
+| | county | latitude | longitude | center_lat | center_long | center_distance |
+|:--|:--------|:---------|:----------|:-----------|:------------|:----------------|
+| 9766 | Hawaii | 21.393852 | -157.742967 | 19.692992 | -155.542907 | 184.590626 |
+| 10396 | Honolulu | -0.352130 | -159.955034 | 21.351255 | -157.895734 | 1506.077762 |
+| 12399 | Honolulu | 28.289839 | -177.372887 | 21.351255 | -157.895734 | 1310.107968 |
+| 15413 | Kauai | 21.456171 | -157.768809 | 22.026183 | -159.429620 | 113.637627 |
+| 15448 | Honolulu | 19.758484 | -155.455961 | 21.351255 | -157.895734 | 192.422146 |
+```
+
+Google search shows that the geographic boundaries of Hawaii are
+
+**min_latitude:** 18.910361
+**max_latitude:** 28.402123
+**min_longitude:** -178.334698
+**max_longitude:** -154.806773
+
+The outliers in our dataset have impossible latitude/longitude values. I got rid of all rows with invalid latitude and longitude values and ran it again.
+
+```
+| | county | latitude | longitude | center_lat | center_long | center_distance |
+|:--|:--------|:---------|:----------|:-----------|:------------|:----------------|
+| 9766 | Hawaii | 21.393852 | -157.742967 | 19.692992 | -155.542907 | 184.590626 |
+| 15413 | Kauai | 21.456171 | -157.768809 | 22.026183 | -159.429620 | 113.637627 |
+| 15448 | Honolulu | 19.758484 | -155.455961 | 21.351255 | -157.895734 | 192.422146 |
+| 15780 | Honolulu | 19.644531 | -155.993291 | 21.351255 | -157.895734 | 170.490843 |
+| 18630 | Maui | 21.321267 | -158.068642 | 20.852130 | -156.509107 | 105.639856 |
+```
+
+> We did it, Joe!
+> -VP Kamala Harris
+
+`center_distance` columns acquired. Finally, I could combine everything into the `is_coastal` column.
+
+```python
+# Check the distribution
+print(meta['is_coastal'].value_counts())
+```
+| is_coastal | count |
+|:-----------|------:|
+| False | 14890 |
+| True | 6244 |
+```
+Just checking by county.
+```
+| county | is_coastal | count |
+|:-------|:-----------|------:|
+| Hawaii | False | 2655 |
+| Hawaii | True | 1138 |
+| Honolulu | False | 8359 |
+| Honolulu | True | 3583 |
+| Kauai | False | 978 |
+| Kauai | True | 419 |
+| Maui | False | 2576 |
+| Maui | True | 1104 |
+```
 
 **`reviews` Dataset**  
 ✅ Review length column  
