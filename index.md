@@ -106,16 +106,51 @@ In this project, I will be developing several new features to use in a Linear Re
 To create our `county` column, we first needed to create a `zipcode` column. I created a `get_zipcode` function that extracted the zipcode of each business. I applied this function to `meta['address']` to create the new column. 
 
 ### County Column
-Then, I created a custom dictionary that mapped all zipcodes in Hawaii to their corresponding counties. This was a manualy process, and initially, when I compared the number of missing `county` values to `zipcode` values, I got this tuple: `(835, 417)`.
+Then, I created a custom dictionary that mapped all zipcodes in Hawaii to their corresponding counties. This was a manual process, and initially, when I compared the number of missing `county` values to `zipcode` values, I got this tuple: `(835, 417)`.
 
 If the missingness values of `county` were dependent on `zipcode`, the values in the tuple should be equal to each other. A closer look into the corresponding addresses of missing `county` values revealed an array of zipcodes I overlooked in the creation of my dictionary.
 
-> array(['96857', None, '96733', '96848', '96796', '96726', '96795',
+```
+array(['96857', None, '96733', '96848', '96796', '96726', '96795',
        '96853', '96860', '96127', '96745', '96123', '96751', '96863',
        '96861', '96718', '96830', '96767', '96858', '96867', '96824',
        '96859'], dtype=object)
+```
 
-I updated the dictionary with the list of zipcodes. Interestingly, the zipcodes 96127 and 96123 are both located in Lassen County, California. I pulled up the specific address and business to see what was going on.
+I updated the dictionary with the list of zipcodes. Interestingly, the zipcodes `96127` and `96123` are both located in Lassen County, California. I pulled up the specific address and business to see what was going on.
+
+```python
+meta[meta['zipcode'] == '96127']
+print(meta.iat[1219, 1])
+```
+```
+Titanium Rim Repair, 961272 Waihona St, Pearl City, HI 96782
+```
+
+```python
+meta[meta['zipcode'] == '96123']
+print(meta.iat[1663, 1])
+```
+```
+Elite Discount Furniture Warehouse, 961237 Waihona St, Pearl City, HI 96782
+```
+
+The problem with regex's `re.search` is that it returns the first match. These addresses happened to have a string pattern that matched the zipcode pattern, BEFORE the zipcode. Note how they are both located on the same street and have the same zipcode; it's likely they're both in the same plaza and follow a similar naming pattern. I manually updated the zipcode value in these rows.
+
+Finally, it also appeared that zipcode `96867` didn't exist in unitedstateszipcodes.org nor in a regular search.
+
+```python
+meta[meta['zipcode'] == '96867']
+print(f"Business Name: {meta.iat[6655, 0]}")
+print(f"Business Address: {meta.iat[6655, 1]}")
+```
+```
+Business Name: Gas Lanes
+Business Address: Gas Lanes, Building 3071, 3rd St, MCBH, HI 96867
+```
+
+This address, called `Gas Lanes` and referred to as `Marine Mart` is located on Marine Corps Base, HI. While the zipcode itself does not seem to exist, the address is correct through search verification. I have a feeling that this zipcode scenario has something to do with the fact that this gas station/convenience store is only open to MCBH access only. We'll impute NaN values for this business' `county` and `zipcode` values to omit this from analysis.
+
 
 **`reviews` Dataset**  
 ✅ Review length column  
