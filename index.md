@@ -472,14 +472,17 @@ These are the top categories of businesses where `price` WAS missing.
 | Clothing store     |     347 |
 | Auto repair shop   |     337 |
 
-I also took a high level look, and saw that businesses were `price` was missing were a lot of national parks and beaches. So, these are my hypotheses:
+I also took a high level look, and saw that businesses were `price` was missing were a lot of national parks and beaches. So, these were my original hypotheses:
 
 **Null:** The distribution of `category` is the same whether `price` is missing or not.  
 **Alternative:** The distribution of `category` differs when `price` is missing vs present.
 
-> 📝 For the TAs grading my website, yes, I realize I wrote `address` instead of `price` in my hypotheses in the Jupyter Notebook file submission. I also used `fair_permute_diffs` and `n_permutations` instead of `missing_permute_diffs` and `missingness_n_permute`. This is because I am stupid.
+> 📝 For the TAs grading my website, yes, I realize I wrote `address` instead of `price` in my hypotheses in the Jupyter Notebook file submission. I also used `fair_permute_diffs` and `n_permutations` instead of `missing_permute_diffs` and `missingness_n_permute`. This is because I am stupid. I also didn't update my hypotheses when I redid my permutation test, so here is the corrected hypotheses.
 
 Because `category` is a categorical variable, we will use Total Variation Distance (TVD). There are a lot of different categories, so I'll simplify it by comparing on `Is Restaurant` or not.
+
+**Null:** The distribution of `is_restaurant` is the same whether `price` is missing or not.  
+**Alternative:** The distribution of `is_restaurant` differs when `price` is missing vs present.
 
 When I calculated the observed TVD, I got **0.04320464177865135**. Now, when I ran my permutation test, I got a p-value of 0.
 
